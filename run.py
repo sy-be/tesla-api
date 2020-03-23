@@ -53,7 +53,10 @@ class Credentials(object):
 
 class VehicleManager(object):
     def __init__(self, bearer):
-        self.header_auth = {"Authorization": "Bearer {}".format(bearer)}
+        self.header_auth = {
+            "Authorization": "Bearer {}".format(bearer),
+            "User-Agent": "github.com/ph0enix49/tesla-api",
+        }
     
     def list_vehicles(self):
         resp = requests.get("https://owner-api.teslamotors.com/api/1/vehicles", headers=self.header_auth)
@@ -62,14 +65,33 @@ class VehicleManager(object):
                 response['display_name'], response['vin'], response['id']
             ))
     
+    def wake_up(self, vehicle_id):
+        requests.post(
+            "https://owner-api.teslamotors.com/api/1/vehicles/{}/wake_up".format(vehicle_id),
+            headers=self.header_auth,
+        )
+
     def get_vehicle_state(self, vehicle_id):
+        self.wake_up(vehicle_id)
+        time.sleep(30)
         resp = requests.get(
             "https://owner-api.teslamotors.com/api/1/vehicles/{}/data_request/vehicle_state".format(vehicle_id),
             headers=self.header_auth,
         )
-        print("\n".join(["{}: {}".format(k, v) for k, v in resp.json().get("response", {}).items()]))
+        print(resp.json())
+
+    def get_drive_state(self, vehicle_id):
+        self.wake_up(vehicle_id)
+        time.sleep(30)
+        resp = requests.get(
+            "https://owner-api.teslamotors.com/api/1/vehicles/{}/data_request/drive_state".format(vehicle_id),
+            headers=self.header_auth,
+        )
+        print(resp.json())
     
     def set_sentry(self, vehicle_id, param):
+        self.wake_up(vehicle_id)
+        time.sleep(30)
         body = {
             "on": param
         }
@@ -78,7 +100,6 @@ class VehicleManager(object):
             headers=self.header_auth,
             json=body,
         )
-        print(resp.json())
         if resp.json().get("response", "{}").get("result") is True:
             logging.info("sentry mode set to {}".format(param))
             print("successfully set to {}".format(param))
@@ -88,7 +109,8 @@ def main():
     parser = argparse.ArgumentParser(description="run commands against a Tesla vehicle")
     parser.add_argument("-i", help="vehicle id to operate on")
     parser.add_argument("-l", "--list", help="lists all available vehicles", action="store_true")
-    parser.add_argument("-d", "--state", help="get vehicle state", action="store_true")
+    parser.add_argument("-s", "--state", help="get vehicle state", action="store_true")
+    parser.add_argument("-d", "--drive-state", help="get drive state", action="store_true")
     subparsers = parser.add_subparsers()
 
     sentry_cmd = subparsers.add_parser("sentry-mode", help="manipulate sentry mode")
@@ -114,6 +136,8 @@ def main():
         sys.exit(0)
     if args.state:
         vehicle_manager.get_vehicle_state(args.i)
+    if args.drive_state:
+        vehicle_manager.get_drive_state(args.i)
     if hasattr(args, "sentry_on") or hasattr(args, "sentry_off"):
         param = "true" if args.sentry_on else "false"
         vehicle_manager.set_sentry(args.i, param)
