@@ -86,7 +86,7 @@ class VehicleManager(object):
 
 def main():
     parser = argparse.ArgumentParser(description="run commands against a Tesla vehicle")
-    parser.add_argument("i", help="vehicle id to operate on")
+    parser.add_argument("-i", help="vehicle id to operate on")
     parser.add_argument("-l", "--list", help="lists all available vehicles", action="store_true")
     parser.add_argument("-d", "--state", help="get vehicle state", action="store_true")
     subparsers = parser.add_subparsers()
