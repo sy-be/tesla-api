@@ -103,6 +103,9 @@ def main():
         os.environ.get("TESLA_CLIENT_ID"),
         os.environ.get("TESLA_CLIENT_SECRET"),
     )
+    if not credentials.get_bearer():
+        print("credentials are not available")
+        sys.exit(1)
     vehicle_manager = VehicleManager(credentials.get_bearer())
     if args.list is True:
         vehicle_manager.list_vehicles()
