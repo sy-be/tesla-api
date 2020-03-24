@@ -6,6 +6,7 @@ Library and a script to control your Tesla from cli. Works best for scheduled op
 scheduling sentry mode to turn on and off.
 
 example systemd service and timers are included in `contrib/` folder.
+copy them to `~/.config/systemd/user` (create directories if necessary)
 make sure to set necessary credentials in systemd service for the commands to actually work.
 It is suggested to manually run the script in order to get correct vehicle id to include in systemd service file.
 
