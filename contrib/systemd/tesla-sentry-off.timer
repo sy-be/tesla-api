@@ -1,0 +1,10 @@
+[Unit]
+Description=Turn sentry off
+
+[Timer]
+OnCalendar=*-*-* 06:00:00
+# File describing job to execute
+Unit=tesla-sentry-off.service
+
+[Install]
+WantedBy=timers.target

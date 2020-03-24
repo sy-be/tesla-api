@@ -1,0 +1,13 @@
+[Unit]
+Description=Sets Tesla sentry mode on
+
+[Service]
+Type=simple
+Environment=TESLA_PASSWORD=<password>
+Environment=TESLA_EMAIL=<email>
+Environment=TESLA_CLIENT_ID=<client_id>
+Environment=TESLA_CLIENT_SECRET=<client_secret>
+ExecStart=/home/pi/bin/tesla-api/run.py -i <vehicle_id> sentry-mode --on
+
+[Install]
+WantedBy=default.target
