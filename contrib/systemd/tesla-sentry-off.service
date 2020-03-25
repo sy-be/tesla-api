@@ -11,5 +11,3 @@ Environment=TESLA_CLIENT_SECRET=<client_secret>
 ExecStart=/home/pi/bin/tesla-api/run.py -i <vehicle_id> sentry-mode --off
 WorkingDirectory=/home/pi/bin/tesla-api/
 
-[Install]
-WantedBy=default.target

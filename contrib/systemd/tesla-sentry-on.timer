@@ -5,6 +5,7 @@ Description=Turn sentry on
 OnCalendar=*-*-* 00:00:00
 # File describing job to execute
 Unit=tesla-sentry-on.service
+Persistent=true
 
 [Install]
 WantedBy=timers.target

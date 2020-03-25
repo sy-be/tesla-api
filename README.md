@@ -26,5 +26,7 @@ systemctl start tesla-sentry-off.service
 to enable timers:
 ```
 systemctl enable tesla-sentry-on.timer 
-systemctl enable tesla-sentry-off.timer 
+systemctl enable tesla-sentry-off.timer
+systemctl start tesla-sentry-on.timer
+systemctl start tesla-sentry-off.timer
 ```
