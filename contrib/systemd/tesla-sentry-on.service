@@ -4,10 +4,7 @@ Description=Sets Tesla sentry mode on
 [Service]
 User=pi
 Type=simple
-Environment=TESLA_PASSWORD=<password>
-Environment=TESLA_EMAIL=<email>
-Environment=TESLA_CLIENT_ID=<client_id>
-Environment=TESLA_CLIENT_SECRET=<client_secret>
+# make sure to set correct paths
+EnvironmentFile=/home/pi/bin/private/credentials
 ExecStart=/home/pi/bin/tesla-api/run.py -i <vehicle_id> sentry-mode --on
 WorkingDirectory=/home/pi/bin/tesla-api/
-

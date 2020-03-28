@@ -101,9 +101,33 @@ class VehicleManager(object):
             json=body,
         )
         if resp.json().get("response", "{}").get("result") is True:
-            logging.info("sentry mode set to {}".format(param))
-            print("successfully set to {}".format(param))
+            msg = "sentry mode set to {}".format(param)
+            logging.info(msg)
+            print(msg)
 
+    def charge_start(self, vehicle_id):
+        self.wake_up(vehicle_id)
+        time.sleep(30)
+        resp = requests.post(
+            "https://owner-api.teslamotors.com/api/1/vehicles/{}/command/charge_start".format(vehicle_id),
+            headers=self.header_auth,
+        )
+        if resp.json().get("response", "{}").get("result") is True:
+            msg = "charge successfully started"
+            logging.info(msg)
+            print(msg)
+
+    def charge_stop(self, vehicle_id):
+        self.wake_up(vehicle_id)
+        time.sleep(30)
+        resp = requests.post(
+            "https://owner-api.teslamotors.com/api/1/vehicles/{}/command/charge_stop".format(vehicle_id),
+            headers=self.header_auth,
+        )
+        if resp.json().get("response", "{}").get("result") is True:
+            msg = "charge successfully stopped"
+            logging.info(msg)
+            print(msg)
 
 def main():
     parser = argparse.ArgumentParser(description="run commands against a Tesla vehicle")
@@ -111,6 +135,8 @@ def main():
     parser.add_argument("-l", "--list", help="lists all available vehicles", action="store_true")
     parser.add_argument("-s", "--state", help="get vehicle state", action="store_true")
     parser.add_argument("-d", "--drive-state", help="get drive state", action="store_true")
+    parser.add_argument("-c", "--charging-start", help="initiate charging on vehicle", action="store_true")
+    parser.add_argument("-f", "--charging-stop", help="finish charging on vehicle", action="store_true")
     subparsers = parser.add_subparsers()
 
     sentry_cmd = subparsers.add_parser("sentry-mode", help="manipulate sentry mode")
@@ -138,6 +164,10 @@ def main():
         vehicle_manager.get_vehicle_state(args.i)
     if args.drive_state:
         vehicle_manager.get_drive_state(args.i)
+    if args.charging_start:
+        vehicle_manager.charge_start(args.i)
+    if args.charging_stop:
+        vehicle_manager.charge_stop(args.i)
     if hasattr(args, "sentry_on") or hasattr(args, "sentry_off"):
         param = "true" if args.sentry_on else "false"
         vehicle_manager.set_sentry(args.i, param)

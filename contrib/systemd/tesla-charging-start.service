@@ -1,10 +1,10 @@
 [Unit]
-Description=Sets Tesla sentry mode off
+Description=Starts charging
 
 [Service]
 User=pi
 Type=simple
 # make sure to set correct paths
 EnvironmentFile=/home/pi/bin/private/credentials
-ExecStart=/home/pi/bin/tesla-api/run.py -i <vehicle_id> sentry-mode --off
+ExecStart=/home/pi/bin/tesla-api/run.py -i <vehicle_id> --charging-start
 WorkingDirectory=/home/pi/bin/tesla-api/
