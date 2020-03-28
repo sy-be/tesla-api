@@ -3,13 +3,22 @@ Tesla remoteops
 =======================
 
 Library and a script to control your Tesla from cli. Works best for scheduled operations, such as
-scheduling sentry mode to turn on and off.
+scheduling sentry mode to turn on and off or starting and stopping charging.
 
 example systemd service and timers are included in `contrib/` folder.
 copy them to `/etc/systemd/system/`
-make sure to set necessary credentials and paths in systemd service files for the commands to actually work.
+copy example `contrib/systemd/credentials` file somewhere safe, e.g. `~/bin/private` and update it.
+
+update systemd service files to point to credentials location and also update it with vehicle id
+to get vehicle id (correct paths if necessary):
+```
+$ set -o allexport
+$ source private/credentials 
+$ set +o allexport
+$ ./tesla-api/run.py -l
+```
+above will generate a bearer key and also will return vehicle ids to include in systemd files.
 tesla client id and secret are here: https://pastebin.com/pS7Z6yyP
-It is suggested to manually run the script in order to get correct vehicle id to include in systemd service file.
 
 to enable systemd service:
 ```
