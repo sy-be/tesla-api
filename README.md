@@ -15,7 +15,8 @@ to get vehicle id (correct paths if necessary):
 $ set -o allexport
 $ source private/credentials 
 $ set +o allexport
-$ ./tesla-api/run.py -l
+$ cd tesla-api
+$ ./run.py -l
 ```
 above will generate a bearer key and also will return vehicle ids to include in systemd files.
 tesla client id and secret are here: https://pastebin.com/pS7Z6yyP
