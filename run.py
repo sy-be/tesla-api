@@ -137,9 +137,11 @@ def main():
     parser.add_argument("-d", "--drive-state", help="get drive state", action="store_true")
     parser.add_argument("-c", "--charging-start", help="initiate charging on vehicle", action="store_true")
     parser.add_argument("-f", "--charging-stop", help="finish charging on vehicle", action="store_true")
-    subparsers = parser.add_subparsers()
+    parser.add_argument("-w", "--wake", help="wake up the vehicle", action="store_true")
 
+    subparsers = parser.add_subparsers()
     sentry_cmd = subparsers.add_parser("sentry-mode", help="manipulate sentry mode")
+
     sentry_on_off = sentry_cmd.add_mutually_exclusive_group()
     sentry_on_off.add_argument("--on", help="turn sentry mode on", action="store_true", dest="sentry_on")
     sentry_on_off.add_argument("--off", help="turn sentry mode off", action="store_true", dest="sentry_off")
@@ -168,6 +170,8 @@ def main():
         vehicle_manager.charge_start(args.i)
     if args.charging_stop:
         vehicle_manager.charge_stop(args.i)
+    if args.wake:
+        vehicle_manager.wake_up(args.i)
     if hasattr(args, "sentry_on") or hasattr(args, "sentry_off"):
         param = "true" if args.sentry_on else "false"
         vehicle_manager.set_sentry(args.i, param)
